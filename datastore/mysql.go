@@ -44,15 +44,15 @@ func NewMySQLDataStore() (*MySQLDataStore, error) {
 	}, nil
 }
 
-func (db *MySQLDataStore) Query(query string) (*sql.Rows, error) {
-	rows, err := db.conn.Query(query)
+func (db *MySQLDataStore) Query(query string, params ...any) (*sql.Rows, error) {
+	rows, err := db.conn.Query(query, params...)
 	if err != nil {
 		return nil, err
 	}
 	return rows, nil
 }
 
-func (db *MySQLDataStore) QueryRow(query string) *sql.Row {
-	row := db.conn.QueryRow(query)
+func (db *MySQLDataStore) QueryRow(query string, params ...any) *sql.Row {
+	row := db.conn.QueryRow(query, params...)
 	return row
 }
