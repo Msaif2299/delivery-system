@@ -101,22 +101,22 @@ func UpdateDriverInfoHandler(c *gin.Context) {
 	newDriver := ConvertDriverRequestToDTO(updateDriverRequest)
 	var queryBuilder strings.Builder
 	queryBuilder.WriteString("UPDATE drivers SET ")
-	params := []any{}
-	paramsQueryMaps := map[string][]any{
-		"full_name":                    {newDriver.FullName, ""},
-		"license_number":               {newDriver.LicenseNumber, ""},
-		"primary_phone_country_code":   {newDriver.PrimaryPhoneCountryCode, ""},
-		"primary_phone_number":         {newDriver.PrimaryPhoneNumber, ""},
-		"secondary_phone_country_code": {newDriver.SecondaryPhoneCountryCode, ""},
-		"secondary_phone_number":       {newDriver.SecondaryPhoneNumber, ""},
-		"email":                        {newDriver.Email, ""},
-		"status":                       {newDriver.Status, 0},
+	params := []interface{}{}
+	paramsQueryMaps := map[string]interface{}{
+		"full_name":                    newDriver.FullName,
+		"license_number":               newDriver.LicenseNumber,
+		"primary_phone_country_code":   newDriver.PrimaryPhoneCountryCode,
+		"primary_phone_number":         newDriver.PrimaryPhoneNumber,
+		"secondary_phone_country_code": newDriver.SecondaryPhoneCountryCode,
+		"secondary_phone_number":       newDriver.SecondaryPhoneNumber,
+		"email":                        newDriver.Email,
+		"status":                       newDriver.Status,
 	}
-	for queryPart, param := range paramsQueryMaps {
-		if param[0] == param[1] {
+	for column, param := range paramsQueryMaps {
+		if param == "" || param == 0 {
 			continue
 		}
-		queryBuilder.WriteString(fmt.Sprintf("%s = ?, ", queryPart))
+		queryBuilder.WriteString(fmt.Sprintf("%s = ?, ", column))
 		params = append(params, param)
 	}
 	if len(params) == 0 {
@@ -134,6 +134,7 @@ func UpdateDriverInfoHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("driver with id %d created successfully", newDriver.ID)})
 }
 
+// TODO: Change to soft delete on a later date
 func DeleteDriverInfoHandler(c *gin.Context) {
 	ID := c.Param("id")
 	if ID == "" {
