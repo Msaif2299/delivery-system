@@ -27,29 +27,9 @@ type DriverRequest struct {
 }
 
 func ConvertDriverRequestToDTO(req DriverRequest) DriverDTO {
-	return DriverDTO{
-		ID:                        req.ID,
-		FullName:                  req.FullName,
-		LicenseNumber:             req.LicenseNumber,
-		PrimaryPhoneNumber:        req.PrimaryPhoneNumber,
-		PrimaryPhoneCountryCode:   req.PrimaryPhoneCountryCode,
-		SecondaryPhoneNumber:      req.SecondaryPhoneNumber,
-		SecondaryPhoneCountryCode: req.SecondaryPhoneCountryCode,
-		Email:                     req.Email,
-		Status:                    req.Status,
-	}
+	return DriverDTO(req)
 }
 
 func ConvertDTOToDriverRequest(dto DriverDTO) DriverRequest {
-	return DriverRequest{
-		ID:                        dto.ID,
-		FullName:                  dto.FullName,
-		LicenseNumber:             dto.LicenseNumber,
-		PrimaryPhoneNumber:        dto.PrimaryPhoneNumber,
-		PrimaryPhoneCountryCode:   dto.PrimaryPhoneCountryCode,
-		SecondaryPhoneNumber:      dto.SecondaryPhoneNumber,
-		SecondaryPhoneCountryCode: dto.SecondaryPhoneCountryCode,
-		Email:                     dto.Email,
-		Status:                    dto.Status,
-	}
+	return DriverRequest(dto)
 }
