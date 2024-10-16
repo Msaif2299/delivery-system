@@ -1,0 +1,31 @@
+services:
+  api:
+    build: .
+    container_name: api
+    env_file:
+      - ./mysql/.env
+    ports:
+      - "7850:5000"
+    depends_on:
+      - sql
+    networks:
+      - backend
+# TODO: Add health checks and move password and all into secrets
+  sql:
+    build: ./mysql/init
+    restart: always
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_HOST="%"
+    env_file:
+      - ./mysql/.env
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/logs:/logs
+      - ./mysql/data:/var/lib/mysql
+    networks:
+      - backend
+networks:
+  backend:
+    driver: bridge

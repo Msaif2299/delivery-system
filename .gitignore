@@ -1,0 +1,5 @@
+bin
+mysql/data
+mysql/logs
+mysql/.env
+delivery-system.exe
