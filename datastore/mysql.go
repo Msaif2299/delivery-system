@@ -56,3 +56,15 @@ func (db *MySQLDataStore) QueryRow(query string, params ...any) *sql.Row {
 	row := db.conn.QueryRow(query, params...)
 	return row
 }
+
+func (db *MySQLDataStore) Exec(query string, params ...any) (int64, error) {
+	result, err := db.conn.Exec(query, params...)
+	if err != nil {
+		return 0, err
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
+}

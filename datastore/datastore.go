@@ -11,6 +11,7 @@ const SQLDataStoreKey string = "sqldatastorekey"
 type SQLDataStore interface {
 	Query(string, ...any) (*sql.Rows, error)
 	QueryRow(string, ...any) *sql.Row
+	Exec(string, ...any) (int64, error)
 }
 
 func GetSQLDataStore(c *gin.Context) SQLDataStore {

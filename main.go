@@ -20,7 +20,13 @@ func main() {
 	r := gin.New()
 	group := r.Group("api/v1/", datastore.SQLDBProvider(sqlDB))
 	{
-		group.GET("/drivers/:id", drivers.GetDriverHandler)
+		group.GET("/drivers/fetch/:id", drivers.GetDriverHandler)
+
+		group.POST("/drivers/register", drivers.RegisterDriverHandler)
+
+		group.PUT("/drivers/update", drivers.UpdateDriverInfoHandler)
+
+		group.DELETE("/drivers/remove", drivers.DeleteDriverInfoHandler)
 	}
 
 	r.Run(":8080")
