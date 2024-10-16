@@ -8,6 +8,6 @@ RUN go mod download && go mod verify
 
 RUN make build
 
-EXPOSE 5000
+EXPOSE 8080
 
 ENTRYPOINT [ "./delivery-system" ]

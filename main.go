@@ -23,5 +23,5 @@ func main() {
 		group.GET("/drivers/:id", drivers.GetDriverHandler)
 	}
 
-	r.Run(":7850")
+	r.Run(":8080")
 }

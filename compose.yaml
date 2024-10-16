@@ -5,12 +5,11 @@ services:
     env_file:
       - ./mysql/.env
     ports:
-      - "7850:5000"
+      - "127.0.0.1:5000:8080"
     depends_on:
       - sql
     networks:
       - backend
-# TODO: Add health checks and move password and all into secrets
   sql:
     build: ./mysql/init
     restart: always
@@ -19,8 +18,6 @@ services:
       - MYSQL_ROOT_HOST="%"
     env_file:
       - ./mysql/.env
-    ports:
-      - "3306:3306"
     volumes:
       - ./mysql/logs:/logs
       - ./mysql/data:/var/lib/mysql
