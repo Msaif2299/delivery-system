@@ -22,7 +22,7 @@ func GetDriverHandler(c *gin.Context) {
 	}
 	query := "SELECT * FROM drivers WHERE id = ?"
 	db := datastore.GetSQLDataStore(c)
-	var driver Driver
+	var driver DriverDTO
 	row := db.QueryRow(query, ID)
 	if err := row.Scan(&driver.ID,
 		&driver.FullName,
@@ -42,20 +42,21 @@ func GetDriverHandler(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "internal error while searching"})
 		return
 	}
-	c.JSON(http.StatusFound, driver)
+	c.JSON(http.StatusFound, ConvertDTOToDriverRequest(driver))
 }
 
 func RegisterDriverHandler(c *gin.Context) {
-	var newDriver Driver
-	if err := c.BindJSON(newDriver); err != nil {
+	var newDriverRequest DriverRequest
+	if err := c.BindJSON(newDriverRequest); err != nil {
 		fmt.Printf("Error binding POST body in RegisterDriverHandler: %s", err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "json body is malformed"})
 		return
 	}
-	if newDriver.ID == 0 {
+	if newDriverRequest.ID == 0 {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "driver ID cannot be zero"})
 		return
 	}
+	newDriver := ConvertDriverRequestToDTO(newDriverRequest)
 	query := "INSERT INTO drivers (" +
 		"full_name, " +
 		"license_number, " +
@@ -87,16 +88,17 @@ func RegisterDriverHandler(c *gin.Context) {
 }
 
 func UpdateDriverInfoHandler(c *gin.Context) {
-	var newDriver Driver
-	if err := c.BindJSON(newDriver); err != nil {
+	var updateDriverRequest DriverRequest
+	if err := c.BindJSON(updateDriverRequest); err != nil {
 		fmt.Printf("Error binding POST body in RegisterDriverHandler: %s", err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "json body is malformed"})
 		return
 	}
-	if newDriver.ID == 0 {
+	if updateDriverRequest.ID == 0 {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "driver ID cannot be zero"})
 		return
 	}
+	newDriver := ConvertDriverRequestToDTO(updateDriverRequest)
 	var queryBuilder strings.Builder
 	queryBuilder.WriteString("UPDATE drivers SET ")
 	params := []any{}

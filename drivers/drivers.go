@@ -1,6 +1,7 @@
 package drivers
 
-type Driver struct {
+// DriverDTO is used to transfer data into and out of SQL
+type DriverDTO struct {
 	ID                        int64  `json:"id"`
 	FullName                  string `json:"full_name,omitempty"`
 	LicenseNumber             string `json:"license_number,omitempty"`
@@ -10,4 +11,45 @@ type Driver struct {
 	SecondaryPhoneCountryCode string `json:"secondary_phone_country_code,omitempty"`
 	Email                     string `json:"email,omitempty"`
 	Status                    uint8  `json:"status,omitempty"`
+}
+
+// DriverRequest is used to get the data from POST and PUT requests
+type DriverRequest struct {
+	ID                        int64  `json:"id"`
+	FullName                  string `json:"full_name,omitempty"`
+	LicenseNumber             string `json:"license_number,omitempty"`
+	PrimaryPhoneNumber        string `json:"primary_phone_number,omitempty"`
+	PrimaryPhoneCountryCode   string `json:"primary_phone_country_code,omitempty"`
+	SecondaryPhoneNumber      string `json:"secondary_phone_number,omitempty"`
+	SecondaryPhoneCountryCode string `json:"secondary_phone_country_code,omitempty"`
+	Email                     string `json:"email,omitempty"`
+	Status                    uint8  `json:"status,omitempty"`
+}
+
+func ConvertDriverRequestToDTO(req DriverRequest) DriverDTO {
+	return DriverDTO{
+		ID:                        req.ID,
+		FullName:                  req.FullName,
+		LicenseNumber:             req.LicenseNumber,
+		PrimaryPhoneNumber:        req.PrimaryPhoneNumber,
+		PrimaryPhoneCountryCode:   req.PrimaryPhoneCountryCode,
+		SecondaryPhoneNumber:      req.SecondaryPhoneNumber,
+		SecondaryPhoneCountryCode: req.SecondaryPhoneCountryCode,
+		Email:                     req.Email,
+		Status:                    req.Status,
+	}
+}
+
+func ConvertDTOToDriverRequest(dto DriverDTO) DriverRequest {
+	return DriverRequest{
+		ID:                        dto.ID,
+		FullName:                  dto.FullName,
+		LicenseNumber:             dto.LicenseNumber,
+		PrimaryPhoneNumber:        dto.PrimaryPhoneNumber,
+		PrimaryPhoneCountryCode:   dto.PrimaryPhoneCountryCode,
+		SecondaryPhoneNumber:      dto.SecondaryPhoneNumber,
+		SecondaryPhoneCountryCode: dto.SecondaryPhoneCountryCode,
+		Email:                     dto.Email,
+		Status:                    dto.Status,
+	}
 }
