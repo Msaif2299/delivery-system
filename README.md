@@ -15,9 +15,9 @@ The system involves tracking vehicles, managing deliveries, and reacting to real
    Token-based Authentication: Implement JWT or OAuth for session management and API access control.
 2. ### Vehicle Management
    CRUD Operations for Vehicles:
-   :white_check_mark:Create, Read, Update, Delete vehicles from the fleet.
-   :white_check_mark:Store vehicle details like type, make, model, capacity, status, etc.
-   :white_check_mark:Assign Drivers to Vehicles: Associate a vehicle with a driver for a given period.
+   :white_check_mark: Create, Read, Update, Delete vehicles from the fleet.
+   :white_check_mark: Store vehicle details like type, make, model, capacity, status, etc.
+   :white_check_mark: Assign Drivers to Vehicles: Associate a vehicle with a driver for a given period.
    Real-time Telemetry: Receive and store real-time vehicle data like location, speed, fuel level, tire pressure, engine status via WebSocket or Kafka.
    Vehicle Status Management: Set and track vehicle statuses (e.g., idle, in-transit, maintenance).
    Vehicle Availability: Track vehicle availability based on maintenance schedules or task assignments.
