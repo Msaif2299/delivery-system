@@ -21,17 +21,18 @@ func main() {
 	r := gin.New()
 	group := r.Group("api/v1/", datastore.SQLDBProvider(sqlDB))
 	{
-		group.GET("/drivers/fetch/:id", drivers.GetDriverHandler)
-		group.GET("/vehicles/fetch/:id", vehicles.GetVehicleHandler)
+		group.GET("/drivers/fetch/:license_number", drivers.GetDriverHandler)
+		group.GET("/vehicles/fetch/:license_plate", vehicles.GetVehicleHandler)
 
 		group.POST("/drivers/register", drivers.RegisterDriverHandler)
 		group.POST("/vehicles/register", vehicles.RegisterVehicleHandler)
+		group.POST("/vehicles/assigndriver", vehicles.AssignDriverToVehicleHandler)
 
 		group.PUT("/drivers/update", drivers.UpdateDriverInfoHandler)
 		group.PUT("/vehicles/update", vehicles.UpdateVehicleInfoHandler)
 
-		group.DELETE("/drivers/remove", drivers.DeleteDriverInfoHandler)
-		group.DELETE("/vehicles/remove", vehicles.DeleteVehicleInfoHandler)
+		group.DELETE("/drivers/remove/:license_number", drivers.DeleteDriverInfoHandler)
+		group.DELETE("/vehicles/remove/:license_plate", vehicles.DeleteVehicleInfoHandler)
 	}
 
 	r.Run(":8080")

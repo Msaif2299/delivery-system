@@ -11,16 +11,12 @@ import (
 )
 
 func GetDriverHandler(c *gin.Context) {
-	ID := c.Param("id")
+	ID := c.Param("license_number")
 	if ID == "" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "no id param found"})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "no license number param found"})
 		return
 	}
-	if ID == "0" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "id cannot be 0"})
-		return
-	}
-	query := "SELECT * FROM drivers WHERE id = ?"
+	query := "SELECT * FROM drivers WHERE license_number = ?"
 	db := datastore.GetSQLDataStore(c)
 	var driver DriverDTO
 	row := db.QueryRow(query, ID)
@@ -35,7 +31,7 @@ func GetDriverHandler(c *gin.Context) {
 		&driver.Status,
 	); err != nil {
 		if err == sql.ErrNoRows {
-			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "driver id does not exist"})
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"message": "driver license number does not exist"})
 			return
 		}
 		fmt.Printf("SQL Error encountered in GetDriverHandler: %s", err.Error())
@@ -47,13 +43,13 @@ func GetDriverHandler(c *gin.Context) {
 
 func RegisterDriverHandler(c *gin.Context) {
 	var newDriverRequest DriverRequest
-	if err := c.BindJSON(newDriverRequest); err != nil {
+	if err := c.BindJSON(&newDriverRequest); err != nil {
 		fmt.Printf("Error binding POST body in RegisterDriverHandler: %s", err.Error())
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "json body is malformed"})
 		return
 	}
-	if newDriverRequest.ID == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "driver ID cannot be zero"})
+	if newDriverRequest.LicenseNumber == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "driver license number cannot be zero"})
 		return
 	}
 	newDriver := ConvertDriverRequestToDTO(newDriverRequest)
@@ -68,7 +64,7 @@ func RegisterDriverHandler(c *gin.Context) {
 		"status)" +
 		"VALUES (?,?,?,?,?,?,?,?)"
 	db := datastore.GetSQLDataStore(c)
-	id, err := db.Exec(
+	_, err := db.Exec(
 		query,
 		newDriver.FullName,
 		newDriver.LicenseNumber,
@@ -84,7 +80,7 @@ func RegisterDriverHandler(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "unable to register the driver"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("driver with id %d created successfully", id)})
+	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("driver with id %s created successfully", newDriver.LicenseNumber)})
 }
 
 func UpdateDriverInfoHandler(c *gin.Context) {
@@ -94,8 +90,8 @@ func UpdateDriverInfoHandler(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "json body is malformed"})
 		return
 	}
-	if updateDriverRequest.ID == 0 {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "driver ID cannot be zero"})
+	if updateDriverRequest.LicenseNumber == "" {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "driver license number cannot be zero"})
 		return
 	}
 	newDriver := ConvertDriverRequestToDTO(updateDriverRequest)
@@ -123,34 +119,30 @@ func UpdateDriverInfoHandler(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "nothing to update"})
 		return
 	}
-	params = append(params, newDriver.ID)
+	params = append(params, newDriver.LicenseNumber)
 	db := datastore.GetSQLDataStore(c)
-	_, err := db.Exec(queryBuilder.String()[:queryBuilder.Len()-1]+" WHERE id = ?", params...)
+	_, err := db.Exec(queryBuilder.String()[:queryBuilder.Len()-1]+" WHERE license_number = ?", params...)
 	if err != nil {
 		fmt.Printf("Error encountered in SQL in UpdateDriverInfo: %s", err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "unable to update the driver"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("driver with id %d created successfully", newDriver.ID)})
+	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("driver with id %s created successfully", newDriver.LicenseNumber)})
 }
 
 // TODO: Change to soft delete on a later date
 func DeleteDriverInfoHandler(c *gin.Context) {
-	ID := c.Param("id")
+	ID := c.Param("license_number")
 	if ID == "" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "no id param found"})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "no license_number param found"})
 		return
 	}
-	if ID == "0" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "id cannot be 0"})
-		return
-	}
-	query := "DELETE FROM table WHERE id = ?"
+	query := "DELETE FROM table WHERE license_number = ?"
 	db := datastore.GetSQLDataStore(c)
 	if _, err := db.Exec(query, ID); err != nil {
 		fmt.Printf("SQL Error encountered in DeleteDriverInfoHandler: %s", err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "internal error while deleting"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("driver with id %s deleted successfully", ID)})
+	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("driver with license_number %s deleted successfully", ID)})
 }

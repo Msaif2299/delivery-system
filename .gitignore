@@ -3,3 +3,4 @@ mysql/data
 mysql/logs
 mysql/.env
 delivery-system.exe
+insert_query_generator.py

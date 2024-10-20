@@ -62,7 +62,7 @@ func (db *MySQLDataStore) Exec(query string, params ...any) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
-	id, err := result.LastInsertId()
+	id, err := result.RowsAffected()
 	if err != nil {
 		return 0, err
 	}
