@@ -23,9 +23,9 @@ The system involves tracking vehicles, managing deliveries, and reacting to real
    Vehicle Availability: Track vehicle availability based on maintenance schedules or task assignments.\
 3. ### Driver Management
    CRUD Operations for Drivers:\
-   Create, Read, Update, Delete driver profiles.\
-   Manage driver information such as license number, contact details, and status (e.g., active, unavailable).\
-   Driver Assignment: Assign a driver to a delivery task or vehicle.\
+   ✅Create, Read, Update, Delete driver profiles.\
+   ✅Manage driver information such as license number, contact details, and status (e.g., active, unavailable).\
+   ✅Driver Assignment: Assign a driver to a delivery task or vehicle.\
    Driver Route View: Allow drivers to view their assigned routes and task details.\
    Driver Notifications: Send task updates or route changes via WebSocket or messaging queues (Kafka).\
 4. ### Delivery Task Management
