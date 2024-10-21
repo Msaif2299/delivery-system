@@ -35,5 +35,10 @@ func main() {
 		group.DELETE("/vehicles/remove/:license_plate", vehicles.DeleteVehicleInfoHandler)
 	}
 
+	websocketGroup := r.Group("websocket/v1/")
+	{
+		websocketGroup.GET("/vehicles/telemetry/update", drivers.UpdateTelemetryData)
+	}
+
 	r.Run(":8080")
 }
