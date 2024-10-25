@@ -3,6 +3,7 @@
         <h1>
             Websocket testing
         </h1>
+        <label>License Plate: </label><input type="text" id="license_plate"><br>
         <label>Latitude: </label><input type="text" id="latitude"><br>
         <label>Longitude: </label><input type="text" id="longitude"><br>
         <button onclick="send()">Send</button>
@@ -27,6 +28,7 @@
         }
     </style>
     <script>
+        var license_plate = document.getElementById("license_plate");
         var latitude = document.getElementById("latitude");
         var longitude = document.getElementById("longitude");
         var socket = new WebSocket("ws://localhost:5000/websocket/v1/vehicles/telemetry/update");
@@ -41,9 +43,11 @@
 
         function send() {
             socket.send(JSON.stringify({
+                "license_plate": license_plate.value,
                 "latitude": latitude.value,
                 "longitude": longitude.value
             }));
+            license_plate.value = "";
             latitude.value = "";
             longitude.value = "";
         }

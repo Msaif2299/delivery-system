@@ -2,5 +2,9 @@ bin
 mysql/data
 mysql/logs
 mysql/.env
+influxdb2/.env
+influxdb2/data
+influxdb2/config
 delivery-system.exe
 insert_query_generator.py
+shared_config

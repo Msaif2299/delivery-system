@@ -17,6 +17,7 @@ func main() {
 		fmt.Printf("Could not establish connection, err: %s exiting...", err.Error())
 		return
 	}
+	noSQLDB := datastore.NewInfluxDB2()
 
 	r := gin.New()
 	group := r.Group("api/v1/", datastore.SQLDBProvider(sqlDB))
@@ -35,7 +36,7 @@ func main() {
 		group.DELETE("/vehicles/remove/:license_plate", vehicles.DeleteVehicleInfoHandler)
 	}
 
-	websocketGroup := r.Group("websocket/v1/")
+	websocketGroup := r.Group("websocket/v1/", datastore.NoSQLDBProvider(noSQLDB))
 	{
 		websocketGroup.GET("/vehicles/telemetry/update", drivers.UpdateTelemetryData)
 	}
