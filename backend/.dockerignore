@@ -1,0 +1,8 @@
+bin
+README.md
+delivery-system.exe
+mysql/data
+insert_query_generator.py
+influxdb2/data
+influxdb2/config
+redis/data

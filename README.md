@@ -12,22 +12,22 @@ The system involves tracking vehicles, managing deliveries, and reacting to real
    Role-based Access Control (RBAC): Different permissions for fleet managers, drivers, and admins.\
    Fleet Manager: Can manage vehicles, deliveries, routes, and drivers.\
    Driver: Can view their assigned tasks and send real-time status updates.\
-   Token-based Authentication: Implement JWT or OAuth for session management and API access control.\
+   Token-based Authentication: Implement JWT or OAuth for session management and API access control.
 2. ### Vehicle Management
    CRUD Operations for Vehicles:\
    ✅ Create, Read, Update, Delete vehicles from the fleet.\
    ✅ Store vehicle details like type, make, model, capacity, status, etc.\
    ✅ Assign Drivers to Vehicles: Associate a vehicle with a driver for a given period.\
-   Real-time Telemetry: Receive and store real-time vehicle data like location, speed, fuel level, tire pressure, engine status via WebSocket or Kafka.\
+   ✅ Real-time Telemetry: Receive and store real-time vehicle data like location, speed, fuel level, tire pressure, engine status via WebSocket or Kafka.\
    Vehicle Status Management: Set and track vehicle statuses (e.g., idle, in-transit, maintenance).\
-   Vehicle Availability: Track vehicle availability based on maintenance schedules or task assignments.\
+   Vehicle Availability: Track vehicle availability based on maintenance schedules or task assignments.
 3. ### Driver Management
    CRUD Operations for Drivers:\
    ✅Create, Read, Update, Delete driver profiles.\
    ✅Manage driver information such as license number, contact details, and status (e.g., active, unavailable).\
    ✅Driver Assignment: Assign a driver to a delivery task or vehicle.\
    Driver Route View: Allow drivers to view their assigned routes and task details.\
-   Driver Notifications: Send task updates or route changes via WebSocket or messaging queues (Kafka).\
+   Driver Notifications: Send task updates or route changes via WebSocket or messaging queues (Kafka).
 4. ### Delivery Task Management
    Task Creation: Create delivery tasks with detailed information (e.g., pickup/dropoff locations, time windows, cargo details).\
    Task Assignment: Assign tasks to vehicles and drivers.\

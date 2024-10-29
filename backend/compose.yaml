@@ -1,0 +1,64 @@
+services:
+  api:
+    build: .
+    container_name: api
+    env_file:
+      - ./mysql/.env
+      - ./influxdb2/.env
+      - ./redis/.env
+    ports:
+      - "127.0.0.1:5000:8080"
+    volumes:
+      - ./shared_config:/var/lib/shared_config:r
+    depends_on:
+      sql:
+        condition: service_started
+      influxdb2:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    networks:
+      - backend
+  sql:
+    build: ./mysql/init
+    restart: always
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_HOST="%"
+    env_file:
+      - ./mysql/.env
+    volumes:
+      - ./mysql/logs:/logs
+      - ./mysql/data:/var/lib/mysql
+    networks:
+      - backend
+  influxdb2:
+    build: ./influxdb2/init
+    container_name: influxdb2
+    env_file:
+      - ./influxdb2/.env
+    volumes:
+      - ./influxdb2/data:/var/lib/influxdb2:rw
+      - ./influxdb2/config:/etc/influxdb2:rw
+      - ./shared_config:/var/lib/influxdb2/shared_config:rw
+    networks:
+      - backend
+  redis:
+    image: redis:7.4-alpine
+    restart: always
+    container_name: redis
+    volumes:
+      - ./redis/data:/root/redis
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    env_file:
+      - ./redis/.env
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    command: ["redis-server"]
+networks:
+  backend:
+    driver: bridge
